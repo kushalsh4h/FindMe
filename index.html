@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Recognition & Search</title>
+    <style>
+      /* Gradient background */
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #1e1e2f, #13131a);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+      }
+
+      /* Glassmorphism-style container */
+      .container {
+        background: rgba(255, 255, 255, 0.08);
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 600px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+        transition: all 0.3s ease;
+        padding-right: 50px;
+      }
+
+      .container:hover {
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+      }
+
+      h1 {
+        font-size: 26px;
+        margin-bottom: 15px;
+        color: #ffffff;
+      }
+
+      input[type="file"] {
+        padding: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        text-align: center;
+        margin-bottom: 15px;
+        transition: background 0.3s ease;
+      }
+
+      input[type="file"]:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      /* Image preview */
+      #preview {
+        display: none;
+        margin-top: 15px;
+        width: 100%;
+        max-height: 250px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Results styling */
+      .results {
+        text-align: left;
+        margin-top: 20px;
+      }
+
+      .results h2,
+      .results h3 {
+        font-size: 18px;
+        color: #ffffff;
+      }
+
+      .results p {
+        font-size: 16px;
+        color: #cccccc;
+      }
+
+      /* Links */
+      .results a {
+        display: block;
+        font-size: 16px;
+        color: #4da6ff;
+        text-decoration: none;
+        margin-top: 10px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+
+      .results a:hover {
+        background: #4da6ff;
+        color: #13131a;
+        transform: scale(1.05);
+      }
+
+      ul {
+        padding-left: 20px;
+      }
+
+      li {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔍 Product Recognition & Search</h1>
+      <input type="file" id="imageUpload" accept="image/*" />
+      <img id="preview" />
+      <div class="results" id="results"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("imageUpload")
+        .addEventListener("change", function (event) {
+          const file = event.target.files[0];
+          if (!file) return;
+
+          // Show image preview
+          const preview = document.getElementById("preview");
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = "block";
+
+          const formData = new FormData();
+          formData.append("file", file);
+
+          fetch("/upload", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              const resultsDiv = document.getElementById("results");
+              resultsDiv.innerHTML = `
+                    <h2>Predicted Product:</h2>
+                    <p>${data.product}</p>
+                    <h3>Description:</h3>
+                    <p>${data.description}</p>
+                    <h3>Similar Products Online:</h3>
+                    <ul>
+                        ${data.search_results
+                          .map(
+                            (result) => `
+                            <li>
+                                <a href="${result.link}" target="_blank">${result.title}</a>
+                            </li>
+                        `
+                          )
+                          .join("")}
+                    </ul>
+                `;
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert("An error occurred. Please try again.");
+            });
+        });
+    </script>
+  </body>
+</html>

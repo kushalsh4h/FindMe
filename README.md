@@ -16,9 +16,18 @@ This project is a **Flask-based web application** that recognizes products from 
 - **Search API**: Google Search (via SerpAPI)
 - **Frontend**: Jinja2 templates (HTML, CSS)
 
-## 📦 Installation
+## 🔍 How It Works
+- Upload an image on the web interface.
+![image](https://github.com/user-attachments/assets/e5fe6b59-b394-45ac-a818-b86cea351c92)
 
-### 1️⃣ Clone the Repository
-```bash
-git clone https://github.com/yourusername/your-repo-name.git
-cd your-repo-name
+- The system uses CLIP to classify the product into categories like "sneakers," "laptop," "watch," etc.
+![image](https://github.com/user-attachments/assets/4125b6e6-493b-4a12-bca6-05a7b7e842e6)
+
+- The BLIP model generates a descriptive caption for the product.
+![image](https://github.com/user-attachments/assets/a279d57b-4fa0-41f2-a257-9f281487febb)
+
+- A Google search (via SerpAPI) retrieves relevant product listings.
+![image](https://github.com/user-attachments/assets/44addd0c-4f30-4dc6-8549-a2ba771ddf2b)
+
+- The search history is stored in SQLite and accessible via /history.
+![image](https://github.com/user-attachments/assets/e17fb0fb-3b18-40fb-a10b-1bd6f121dbc3)

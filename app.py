@@ -78,7 +78,7 @@ def search_google(product_name, description):
         "q": query,
         "hl": "en",
         "gl": "us",
-        "api_key": "5a91fb4ef78a13b9165c5584da9cee19ff67e7bcd6c1aef1a62a1855662a3852"  # Replace with your actual SerpAPI key
+        "api_key": "API KEY"  # Replace with your actual SerpAPI key
     }
     
     search = GoogleSearch(params)
